@@ -1,8 +1,4 @@
-import type {
-  AgentEndEvent,
-  ExtensionAPI,
-  ExtensionContext,
-} from "@mariozechner/pi-coding-agent";
+import type { AgentEndEvent, ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
 import { loadHooksConfig } from "./config.js";
 import { runPreStopHooks } from "./pre-stop.js";
 
@@ -61,19 +57,13 @@ export default function preStopHookExtension(pi: ExtensionAPI): void {
 
     const statusKey = "pre-stop-hook";
     // First hook's statusMessage wins; fall back to generic message
-    const statusMsg = hooks
-      .map((h) => h.statusMessage)
-      .find((s) => s !== undefined);
+    const statusMsg = hooks.map((h) => h.statusMessage).find((s) => s !== undefined);
     ctx.ui.setStatus(statusKey, statusMsg ?? "Running pre-stop hooks...");
 
     // Spread to avoid mutating event.messages; cast because AgentMessage
     // union types reference packages that aren't separately installable.
-    const lastAssistant = ([...event.messages] as unknown[])
-      .reverse()
-      .find(isAssistantMessage);
-    const lastAssistantMessage = lastAssistant
-      ? getTextContent(lastAssistant)
-      : "";
+    const lastAssistant = ([...event.messages] as unknown[]).reverse().find(isAssistantMessage);
+    const lastAssistantMessage = lastAssistant ? getTextContent(lastAssistant) : "";
 
     const sessionFile = ctx.sessionManager.getSessionFile() ?? "";
 

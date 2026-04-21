@@ -60,7 +60,6 @@ async function readHooksFile(path: string): Promise<HooksResult> {
   return { hooks: extractHooks(parsed), warnings: [] };
 }
 
-
 /** Extract PreStopHookConfig[] from a parsed hooks file. */
 function extractHooks(file: HooksFile): PreStopHookConfig[] {
   const stopGroups = file?.hooks?.Stop;

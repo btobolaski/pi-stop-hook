@@ -63,9 +63,7 @@ export function executeCommand(
       const partialStdout = Buffer.concat(stdoutChunks).toString("utf-8");
       const partialStderr = Buffer.concat(stderrChunks).toString("utf-8");
       const errorMsg =
-        err.code === "ABORT_ERR"
-          ? `Hook timed out after ${timeoutMs}ms`
-          : err.message;
+        err.code === "ABORT_ERR" ? `Hook timed out after ${timeoutMs}ms` : err.message;
       settle({
         exitCode: null,
         stdout: partialStdout,
@@ -78,10 +76,7 @@ export function executeCommand(
       let stderr = Buffer.concat(stderrChunks).toString("utf-8");
 
       if (stdoutLimitExceeded || stderrLimitExceeded) {
-        const exceededStreams = [
-          stdoutLimitExceeded && "stdout",
-          stderrLimitExceeded && "stderr",
-        ]
+        const exceededStreams = [stdoutLimitExceeded && "stdout", stderrLimitExceeded && "stderr"]
           .filter(Boolean)
           .join(" and ");
         const limitMsg = `Hook ${exceededStreams} exceeded ${MAX_OUTPUT_BYTES} bytes limit`;

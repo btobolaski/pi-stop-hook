@@ -3,9 +3,7 @@ import { isAssistantMessage, getTextContent } from "../src/extension.js";
 
 describe("isAssistantMessage", () => {
   it("returns true for assistant messages with content array", () => {
-    expect(
-      isAssistantMessage({ role: "assistant", content: [] }),
-    ).toBe(true);
+    expect(isAssistantMessage({ role: "assistant", content: [] })).toBe(true);
   });
 
   it("returns true for assistant messages with text blocks", () => {
@@ -18,15 +16,11 @@ describe("isAssistantMessage", () => {
   });
 
   it("returns false for user messages", () => {
-    expect(
-      isAssistantMessage({ role: "user", content: [] }),
-    ).toBe(false);
+    expect(isAssistantMessage({ role: "user", content: [] })).toBe(false);
   });
 
   it("returns false when content is not an array", () => {
-    expect(
-      isAssistantMessage({ role: "assistant", content: "text" }),
-    ).toBe(false);
+    expect(isAssistantMessage({ role: "assistant", content: "text" })).toBe(false);
   });
 
   it("returns false for null", () => {

@@ -3,10 +3,7 @@ import { executeCommand } from "../src/executor.js";
 
 describe("executeCommand", () => {
   it("returns exit 0 with stdout", async () => {
-    const result = await executeCommand(
-      "echo 'hello world'",
-      "",
-    );
+    const result = await executeCommand("echo 'hello world'", "");
     expect(result.exitCode).toBe(0);
     expect(result.stdout.trim()).toBe("hello world");
     expect(result.stderr).toBe("");
@@ -18,10 +15,7 @@ describe("executeCommand", () => {
   });
 
   it("returns exit 2 with stderr", async () => {
-    const result = await executeCommand(
-      "echo 'block reason' >&2; exit 2",
-      "",
-    );
+    const result = await executeCommand("echo 'block reason' >&2; exit 2", "");
     expect(result.exitCode).toBe(2);
     expect(result.stderr.trim()).toBe("block reason");
   });
@@ -34,10 +28,7 @@ describe("executeCommand", () => {
   });
 
   it("captures JSON stdout", async () => {
-    const result = await executeCommand(
-      `echo '{"decision":"block","reason":"not ready"}'`,
-      "",
-    );
+    const result = await executeCommand(`echo '{"decision":"block","reason":"not ready"}'`, "");
     expect(result.exitCode).toBe(0);
     const parsed = JSON.parse(result.stdout.trim());
     expect(parsed.decision).toBe("block");
@@ -58,10 +49,7 @@ describe("executeCommand", () => {
   });
 
   it("handles both stdout and stderr simultaneously", async () => {
-    const result = await executeCommand(
-      "echo 'out'; echo 'err' >&2",
-      "",
-    );
+    const result = await executeCommand("echo 'out'; echo 'err' >&2", "");
     expect(result.exitCode).toBe(0);
     expect(result.stdout.trim()).toBe("out");
     expect(result.stderr.trim()).toBe("err");
@@ -70,19 +58,12 @@ describe("executeCommand", () => {
   it("returns 127 when bash cannot find the command", async () => {
     // bash -c handles "not found" via its own exit code (127);
     // this does NOT trigger the child.on("error") handler.
-    const result = await executeCommand(
-      "/nonexistent/binary-xyz-abc-12345",
-      "",
-    );
+    const result = await executeCommand("/nonexistent/binary-xyz-abc-12345", "");
     expect(result.exitCode).toBe(127);
   });
 
   it("preserves partial stderr before timeout message", async () => {
-    const result = await executeCommand(
-      "echo 'partial' >&2; sleep 10",
-      "",
-      300,
-    );
+    const result = await executeCommand("echo 'partial' >&2; sleep 10", "", 300);
     expect(result.exitCode).toBeNull();
     expect(result.stderr).toContain("partial");
     expect(result.stderr).toContain("timed out");
@@ -90,10 +71,7 @@ describe("executeCommand", () => {
 
   it("kills child and returns error when output exceeds byte limit", async () => {
     // Generate ~2MB of output (well over the 1MB cap)
-    const result = await executeCommand(
-      "dd if=/dev/zero bs=1024 count=2048 2>/dev/null",
-      "",
-    );
+    const result = await executeCommand("dd if=/dev/zero bs=1024 count=2048 2>/dev/null", "");
     expect(result.exitCode).toBeNull();
     expect(result.stderr).toContain("exceeded");
   });

@@ -199,10 +199,7 @@ describe("extractHooks", () => {
   it("skips groups with missing hooks array", () => {
     const file: HooksFile = {
       hooks: {
-        Stop: [
-          {} as { hooks: [] },
-          { hooks: [{ type: "command", command: "valid.sh" }] },
-        ],
+        Stop: [{} as { hooks: [] }, { hooks: [{ type: "command", command: "valid.sh" }] }],
       },
     };
     const hooks = extractHooks(file);
@@ -328,14 +325,11 @@ describe("loadHooksConfig", () => {
     expect(result.hooks).toEqual([]);
     expect(result.warnings).toHaveLength(2);
   });
-
 });
 
 describe("path helpers", () => {
   it("projectHooksPath returns correct path", () => {
-    expect(projectHooksPath("/my/project")).toBe(
-      "/my/project/.pi/hooks.json",
-    );
+    expect(projectHooksPath("/my/project")).toBe("/my/project/.pi/hooks.json");
   });
 
   it("globalHooksPath returns path under home directory", () => {

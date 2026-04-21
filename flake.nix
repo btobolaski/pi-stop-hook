@@ -20,6 +20,9 @@
         nodejs_22
         pnpm
         bun
+        treefmt
+        alejandra
+        prettier
       ];
     in {
       devShells = {

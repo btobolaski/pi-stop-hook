@@ -1,0 +1,13 @@
+[formatter.nix]
+command = "alejandra"
+includes = ["*.nix"]
+
+[formatter.md]
+command = "prettier"
+options = ["--prose-wrap", "always", "--print-width", "120", "--write"]
+includes = ["*.md"]
+
+[formatter.ts]
+command = "prettier"
+options = ["--print-width", "100", "--write"]
+includes = ["*.ts"]

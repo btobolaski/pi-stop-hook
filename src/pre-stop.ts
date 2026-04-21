@@ -75,8 +75,7 @@ export async function runPreStopHooks(
 
     if (result.exitCode === 2) {
       aggregated.shouldStop = false;
-      const reason =
-        result.stderr.trim() || `Hook "${hook.command}" exited with code 2`;
+      const reason = result.stderr.trim() || `Hook "${hook.command}" exited with code 2`;
       aggregated.blockReasons.push(reason);
       continue;
     }
@@ -84,9 +83,7 @@ export async function runPreStopHooks(
     if (result.exitCode !== 0) {
       aggregated.errors.push({
         command: hook.command,
-        error:
-          result.stderr.trim() ||
-          `Hook exited with code ${result.exitCode}`,
+        error: result.stderr.trim() || `Hook exited with code ${result.exitCode}`,
       });
       continue;
     }
@@ -96,9 +93,7 @@ export async function runPreStopHooks(
 
     if (output.decision === "block") {
       aggregated.shouldStop = false;
-      aggregated.blockReasons.push(
-        output.reason ?? `Hook "${hook.command}" blocked the stop`,
-      );
+      aggregated.blockReasons.push(output.reason ?? `Hook "${hook.command}" blocked the stop`);
     }
 
     if (output.continue === false) {

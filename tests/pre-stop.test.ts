@@ -53,9 +53,7 @@ describe("runPreStopHooks", () => {
   });
 
   it("blocks stop when hook exits with code 2", async () => {
-    const hooks: PreStopHookConfig[] = [
-      { command: "echo 'not ready yet' >&2; exit 2" },
-    ];
+    const hooks: PreStopHookConfig[] = [{ command: "echo 'not ready yet' >&2; exit 2" }];
     const result = await runPreStopHooks(hooks, baseContext);
     expect(result.shouldStop).toBe(false);
     expect(result.blockReasons).toContain("not ready yet");
@@ -70,9 +68,7 @@ describe("runPreStopHooks", () => {
   });
 
   it("treats non-0/non-2 exit codes as non-blocking errors", async () => {
-    const hooks: PreStopHookConfig[] = [
-      { command: "echo 'oops' >&2; exit 1" },
-    ];
+    const hooks: PreStopHookConfig[] = [{ command: "echo 'oops' >&2; exit 1" }];
     const result = await runPreStopHooks(hooks, baseContext);
     expect(result.shouldStop).toBe(true);
     expect(result.errors).toHaveLength(1);
@@ -128,9 +124,7 @@ describe("runPreStopHooks", () => {
   });
 
   it("sets haltSession without haltReason when stopReason is absent", async () => {
-    const hooks: PreStopHookConfig[] = [
-      { command: `echo '{"continue":false}'` },
-    ];
+    const hooks: PreStopHookConfig[] = [{ command: `echo '{"continue":false}'` }];
     const result = await runPreStopHooks(hooks, baseContext);
     expect(result.haltSession).toBe(true);
     expect(result.haltReason).toBeUndefined();
@@ -193,9 +187,7 @@ describe("runPreStopHooks", () => {
   });
 
   it("handles timeout as non-blocking error", async () => {
-    const hooks: PreStopHookConfig[] = [
-      { command: "sleep 10", timeout: 0.2 },
-    ];
+    const hooks: PreStopHookConfig[] = [{ command: "sleep 10", timeout: 0.2 }];
     const result = await runPreStopHooks(hooks, baseContext);
     expect(result.shouldStop).toBe(true);
     expect(result.errors).toHaveLength(1);
@@ -209,10 +201,7 @@ describe("runPreStopHooks", () => {
     const ctx = { ...baseContext, stopHookActive: true };
     const result = await runPreStopHooks(hooks, ctx);
     expect(result.errors).toHaveLength(1);
-    const input = JSON.parse(result.errors[0]!.error) as Record<
-      string,
-      unknown
-    >;
+    const input = JSON.parse(result.errors[0]!.error) as Record<string, unknown>;
     expect(input.hook_event_name).toBe("Stop");
     expect(input.session_id).toBe("test-session-123");
     expect(input.transcript_path).toBe("/tmp/test-session.json");
@@ -230,27 +219,21 @@ describe("runPreStopHooks", () => {
   });
 
   it("ignores unrecognised decision values", async () => {
-    const hooks: PreStopHookConfig[] = [
-      { command: `echo '{"decision":"allow"}'` },
-    ];
+    const hooks: PreStopHookConfig[] = [{ command: `echo '{"decision":"allow"}'` }];
     const result = await runPreStopHooks(hooks, baseContext);
     expect(result.shouldStop).toBe(true);
     expect(result.blockReasons).toHaveLength(0);
   });
 
   it("treats explicit continue=true as allow (does not halt)", async () => {
-    const hooks: PreStopHookConfig[] = [
-      { command: `echo '{"continue":true}'` },
-    ];
+    const hooks: PreStopHookConfig[] = [{ command: `echo '{"continue":true}'` }];
     const result = await runPreStopHooks(hooks, baseContext);
     expect(result.shouldStop).toBe(true);
     expect(result.haltSession).toBe(false);
   });
 
   it("ignores stderr when hook exits 0 with valid JSON stdout", async () => {
-    const hooks: PreStopHookConfig[] = [
-      { command: `echo '{}'; echo 'ignored warning' >&2` },
-    ];
+    const hooks: PreStopHookConfig[] = [{ command: `echo '{}'; echo 'ignored warning' >&2` }];
     const result = await runPreStopHooks(hooks, baseContext);
     expect(result.shouldStop).toBe(true);
     expect(result.errors).toHaveLength(0);
@@ -258,9 +241,7 @@ describe("runPreStopHooks", () => {
   });
 
   it("handles invalid JSON stdout on exit 0 as allow", async () => {
-    const hooks: PreStopHookConfig[] = [
-      { command: "echo 'not json at all'" },
-    ];
+    const hooks: PreStopHookConfig[] = [{ command: "echo 'not json at all'" }];
     const result = await runPreStopHooks(hooks, baseContext);
     expect(result.shouldStop).toBe(true);
   });
