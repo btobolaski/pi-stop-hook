@@ -1,0 +1,22 @@
+{
+  "name": "pi-stop-hook",
+  "version": "0.1.0",
+  "description": "PreStop hook extension for pi coding agent",
+  "type": "module",
+  "pi": {
+    "extensions": ["./src/extension.ts"]
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "@mariozechner/pi-coding-agent": "*",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  }
+}
